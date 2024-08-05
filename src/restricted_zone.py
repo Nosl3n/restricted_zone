@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-n
-
 import rospy
 from std_msgs.msg import Float32MultiArray
 from sensor_msgs.msg import PointCloud

@@ -13,7 +13,7 @@ def publish_position():
     # Crea un publicador en el tópico 'person_position' que enviará mensajes de tipo Float32MultiArray
     rospy.init_node('position_publisher', anonymous=True)
     # Inicializa el nodo de ROS llamado 'position_publisher'
-    rate = rospy.Rate(5) # 10hz
+    rate = rospy.Rate(20) # 10hz
     # Establece la frecuencia de publicación a 10 Hz
     y=0
     while not rospy.is_shutdown():
@@ -22,7 +22,8 @@ def publish_position():
         if y < -5:
             y=0
         # Crea un nuevo mensaje Float32MultiArray
-        position.data = [-1.5, y]
+       # position.data = [-1.5, y]
+        position.data = [-0.962, 0.538]
         y=y-0.1
         # Asigna las coordenadas x, y al mensaje
         rospy.loginfo("Publishing position: {}".format(position.data))
