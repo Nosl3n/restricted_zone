@@ -1,11 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Indica que este script debe ser ejecutado con el intérprete de Python del entorno ROS
-
 import rospy
 # Importa rospy, la biblioteca de ROS para Python
 import numpy as np
-
 from std_msgs.msg import Float32MultiArray
 # Importa el tipo de mensaje Float32MultiArray desde std_msgs
 
@@ -18,6 +15,8 @@ def publish_positions():
     # Establece la frecuencia de publicación a 1 Hz 
     X = np.array([1, -1, -1, 1, 0.4, 2], dtype=float)
     Y = np.array([1, 1, 2, -1, 2, 1.4], dtype=float)
+    # -2.660 0.332
+    #-1.88 1.516
     # Define las coordenadas X e Y
 
     while not rospy.is_shutdown():
