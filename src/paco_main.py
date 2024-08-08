@@ -18,7 +18,8 @@ def create_restricted_zone():
     rospy.Subscriber('group_positions', Float32MultiArray, group_positions_callback)
     pub = rospy.Publisher('/restricted_map', PointCloud, queue_size=10)
     rate = rospy.Rate(12)  # 5hz
-    f_threshold = 0.8
+    empty_zone = PointCloud()
+    empty_zone.header.frame_id = "map"
 
     while not rospy.is_shutdown():
         if groups_positions is not None:
@@ -116,11 +117,11 @@ def create_restricted_zone():
                 sigma_yy[i] = ((t1 / distancias[j]) * sigma_y[k]) + ((t2 / distancias[j]) * sigma_y[k + 1])
             # GENERACION DE LA MALLA PARA LA GAUSSIANA
             lado = 2.5; #maximo valor de cada lado de la grafica
-            paso = 0.04; #Paso de la malla, entre punto a punto
-            xpos = abs(max(x))+lado
-            xneg = abs(min(x))-lado
-            ypos = abs(max(y))+lado
-            yneg = abs(min(y))-lado
+            paso = 0.05; #Paso de la malla, entre punto a punto
+            xpos = max(x)+lado
+            xneg = min(x)-lado
+            ypos = max(y)+lado
+            yneg = min(y)-lado
             # gaussiana
             # Se genera la malla en la que se determinará cada punto de la gaussiana
             xx, yy = np.meshgrid(np.arange(xneg, xpos + paso, paso), np.arange(yneg, ypos + paso, paso))
@@ -146,10 +147,10 @@ def create_restricted_zone():
 
             # Se crea cada punto zz de la función gaussiana
             zz = np.exp(-(xx - xcm)**2 / (2 * varianzax**2) - (yy - ycm)**2 / (2 * varianzay**2))
-
+            #print(zz)
             # Se rota el desfase de la gaussiana
             xrot, yrot, zrot = rotar_gaussiana(xx, yy, zz, rotacion, xcm, ycm)
-            print("distancias:", distancias)
+            #print("distancias:", distancias)
             # Resultado final
            
 
@@ -157,7 +158,7 @@ def create_restricted_zone():
             #x, y, f = gaussian2_a2_focussed(xcm, ycm, rotation, variance_front, variance_right, variance_left, variance_rear)
 
             #rospy.loginfo("Gaussian function output: x={}, y={}, f={}".format(x, y, f))
-
+            f_threshold = 0.6
             # Crear los puntos del PointCloud para los valores de f > f_threshold
             for i in range(xrot.shape[0]):
                 for j in range(xrot.shape[1]):
@@ -167,7 +168,7 @@ def create_restricted_zone():
             rospy.loginfo("Publishing restricted zone with {} points.".format(len(restricted_zone.points)))
             pub.publish(restricted_zone)
         rate.sleep()
-
+        
 if __name__ == '__main__':
     groups_positions = None
     

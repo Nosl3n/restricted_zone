@@ -18,7 +18,7 @@ def create_restricted_zone():
     rospy.Subscriber('group_positions', Float32MultiArray, group_positions_callback)
     pub = rospy.Publisher('/restricted_map', PointCloud, queue_size=10)
     rate = rospy.Rate(12)  # 5hz
-    f_threshold = 0.8
+    
 
     while not rospy.is_shutdown():
         if groups_positions is not None:
@@ -59,7 +59,7 @@ def create_restricted_zone():
             x, y, f = gaussian2_a2_focussed(xcm, ycm, rotation, variance_front, variance_right, variance_left, variance_rear)
 
             #rospy.loginfo("Gaussian function output: x={}, y={}, f={}".format(x, y, f))
-
+            f_threshold = 0.4
             # Crear los puntos del PointCloud para los valores de f > f_threshold
             for i in range(x.shape[0]):
                 for j in range(x.shape[1]):

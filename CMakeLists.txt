@@ -11,6 +11,8 @@ find_package(catkin REQUIRED COMPONENTS
   nav_msgs
   rospy
   std_msgs
+  sensor_msgs
+  geometry_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -205,6 +207,18 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-catkin_install_python(PROGRAMS src/restricted_zone.py
+catkin_install_python(PROGRAMS src/daza_main.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+catkin_install_python(PROGRAMS src/paco_main.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+catkin_install_python(PROGRAMS src/personas.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+catkin_install_python(PROGRAMS src/position_group_members.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+catkin_install_python(PROGRAMS src/publish_position.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
